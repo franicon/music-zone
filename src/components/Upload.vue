@@ -55,6 +55,11 @@ export default {
     };
   },
   methods: {
+    cancelUpload() {
+      this.uploads.forEach((upload) => {
+        upload.task.cancel();
+      });
+    },
     upload($event) {
       this.isDragOver = false;
 
@@ -111,11 +116,11 @@ export default {
       });
     },
   },
-  beforeUnmount() {
-    this.uploads.forEach((upload) => {
-      upload.task.cancel();
-    });
-  },
+  // beforeUnmount() {
+  //   this.uploads.forEach((upload) => {
+  //     upload.task.cancel();
+  //   });
+  // },
 };
 </script>
 
