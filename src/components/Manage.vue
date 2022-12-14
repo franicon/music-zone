@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <app-upload ref="upload" />
+        <app-upload ref="upload" :addSong="addSong" />
       </div>
       <div class="col-span-2">
         <div
@@ -21,8 +21,10 @@
               v-for="(song, i) in songs"
               :key="song.id"
               :index="i"
+              :removeSong="removeSong"
               :song="song"
               :updateSong="updateSong"
+              :updateUnsaveFlag="updatedUnsaveFlag"
             />
           </div>
         </div>
@@ -41,6 +43,7 @@ export default {
   data() {
     return {
       songs: [],
+      unsaveFlag: false,
     };
   },
 
@@ -49,19 +52,38 @@ export default {
       .where("uid", "==", auth.currentUser.uid)
       .get();
 
-    snapShort.forEach((document) => {
-      const song = {
-        ...document.data(),
-        docId: document.id,
-      };
-      this.songs.push(song);
-    });
+    snapShort.forEach(this.addSong);
   },
   methods: {
     updateSong(i, values) {
       this.songs[i].modified_name = values.modified_name;
       this.songs[i].genre = values.genre;
     },
+
+    removeSong(i) {
+      this.songs.splice(i, 1);
+    },
+
+    addSong(document) {
+      const song = {
+        ...document.data(),
+        docId: document.id,
+      };
+      this.songs.push(song);
+    },
+    updatedUnsaveFlag(value) {
+      this.unsaveFlag = value;
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.updatedUnsaveFlag) {
+      next();
+    } else {
+      const leave = confirm(
+        "You have unsaved changes are sure you wan tot leave?"
+      );
+      next(leave);
+    }
   },
 };
 </script>

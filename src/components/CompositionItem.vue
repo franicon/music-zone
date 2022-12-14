@@ -4,6 +4,7 @@
       <h4 class="inline-block text-md font-bold">{{ song.modified_name }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
@@ -31,6 +32,7 @@
             name="modified_name"
             placeholder="Enter Song Title"
             type="text"
+            @input="updatedUnsaveFlag(true)"
           />
           <ErrorMessage class="text-red-500 text-xs" name="modified_name" />
         </div>
@@ -41,6 +43,7 @@
             name="genre"
             placeholder="Enter Genre"
             type="text"
+            @input="updatedUnsaveFlag(true)"
           />
           <ErrorMessage class="text-red-500" name="genre" />
         </div>
@@ -65,7 +68,7 @@
 </template>
 
 <script>
-import { songsCollection } from "@/includes/firbase";
+import { songsCollection, storage } from "@/includes/firbase";
 
 export default {
   name: "CompositionItem",
@@ -81,6 +84,13 @@ export default {
     index: {
       type: Number,
       required: true,
+    },
+    removeSong: {
+      type: Function,
+      required: true,
+    },
+    updatedUnsaveFlag: {
+      type: Function,
     },
   },
   data() {
@@ -112,10 +122,21 @@ export default {
         return;
       }
       this.updateSong(this.index, values);
+      this.updatedUnsaveFlag(false);
 
       this.in_submission = false;
       this.alert_variant = "bg-green-500";
       this.alert_msg = "Success!";
+    },
+    async deleteSong() {
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
+
+      await songRef.delete();
+
+      await songsCollection.doc(this.song.docId).delete();
+
+      this.removeSong(this.index);
     },
   },
 };

@@ -45,6 +45,9 @@ import { storage, auth, songsCollection } from "@/includes/firbase";
 
 export default {
   name: "Upload",
+  props: {
+    addSong: Function,
+  },
   data() {
     return {
       isDragOver: false,
@@ -106,7 +109,9 @@ export default {
             };
 
             song.url = await task.snapshot.ref.getDownloadURL();
-            await songsCollection.add(song);
+            const songRef = await songsCollection.add(song);
+            const songSnapShort = await songRef.get();
+            this.addSong(songSnapShort);
 
             this.uploads[uploadIndex].variant = "bg-green-400";
             this.uploads[uploadIndex].icon = "fas fa-check";
