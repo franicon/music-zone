@@ -104,11 +104,12 @@ export default {
       this.alert_variant = "bg-blue-500";
       this.alert_msg = "Please wait! Updating song info.";
       try {
-        await songsCollection.doc(this.song.docID).update(values);
+        await songsCollection.doc(this.song.docId).update(values);
       } catch (error) {
         this.in_submission = false;
         this.alert_variant = "bg-red-500";
         this.alert_msg = "Something Went wrong, Try again Later";
+        return;
       }
       this.updateSong(this.index, values);
 
