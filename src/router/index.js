@@ -7,6 +7,7 @@ import Manage from "@/components/Manage.vue";
 
 //User
 import useUserStore from "@/stores/user";
+import Song from "@/components/Song.vue";
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
   {
     path: "/manage",
     redirect: { name: "manage" },
+  },
+  {
+    path: "/song/:id",
+    name: "song",
+    component: Song,
   },
   {
     path: "/:catchAll(.*)*",
