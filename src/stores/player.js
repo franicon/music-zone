@@ -13,6 +13,8 @@ export default defineStore("player", {
         src: [song.url],
         html5: true,
       });
+      this.sounds.play();
     },
+    async toggleAudio() {},
   },
 });
