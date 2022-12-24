@@ -10,6 +10,7 @@
       <button
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         type="button"
+        @click="newSong(song)"
       >
         <i class="fas fa-play"></i>
       </button>
@@ -90,9 +91,10 @@
 </template>
 
 <script>
-import { songsCollection, auth, commentsCollection } from "@/includes/firbase";
-import { mapState } from "pinia";
 import useUserStore from "@/stores/user";
+import usePlayerStore from "@/stores/player";
+import { mapState, mapActions } from "pinia";
+import { songsCollection, auth, commentsCollection } from "@/includes/firbase";
 
 export default {
   name: "Song",
@@ -137,6 +139,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(usePlayerStore, ["newSong"]),
     async getComment() {
       const snapShort = await commentsCollection
         .where("sid", "==", this.$route.params.id)
