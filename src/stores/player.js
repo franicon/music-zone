@@ -15,6 +15,24 @@ export default defineStore("player", {
       });
       this.sounds.play();
     },
-    async toggleAudio() {},
+    async toggleAudio() {
+      if (!this.sounds.playing) {
+        return;
+      }
+
+      if (this.sounds.playing()) {
+        this.sounds.pause();
+      } else {
+        this.sounds.play();
+      }
+    },
+    getters: {
+      playing: (state) => {
+        if (state.sounds.playing) {
+          return this.sounds.playing();
+        }
+        return false;
+      },
+    },
   },
 });

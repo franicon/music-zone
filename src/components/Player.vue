@@ -8,7 +8,7 @@
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <!-- Play/Pause Button -->
-      <button type="button">
+      <button type="button" @click.prevent="toggleAudio">
         <i class="fa fa-play text-gray-500 text-xl"></i>
       </button>
       <!-- Current Position -->
@@ -35,8 +35,14 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import usePlayerStore from "@/stores/player";
+
 export default {
   name: "Player",
+  methods: {
+    ...mapActions(usePlayerStore, ["toggleAudio"]),
+  },
 };
 </script>
 
