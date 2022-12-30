@@ -19,7 +19,10 @@
 
       <div class="player-currenttime">{{ seek }}</div>
       <!-- Scrub Container  -->
-      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
+      <div
+        class="w-full h-2 rounded bg-gray-200 relative cursor-pointer"
+        @click.prevent="updateSeek"
+      >
         <!-- Player Ball -->
         <span
           :style="{ left: playerProgress }"
@@ -46,7 +49,7 @@ import usePlayerStore from "@/stores/player";
 export default {
   name: "Player",
   methods: {
-    ...mapActions(usePlayerStore, ["toggleAudio"]),
+    ...mapActions(usePlayerStore, ["toggleAudio", "updateSeek"]),
   },
   computed: {
     ...mapState(usePlayerStore, [

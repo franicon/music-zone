@@ -51,6 +51,18 @@ export default defineStore("player", {
         requestAnimationFrame(this.progress);
       }
     },
+
+    updateSeek(event) {
+      if (!this.sounds.playing) {
+        return;
+      }
+      const { x, width } = event.currentTarget.getBoundingClientRect();
+      const clickX = event.clientX - x;
+      const percentage = clickX / width;
+      const seconds = this.sounds.duration() * percentage;
+      this.sounds.seek(seconds);
+      this.sounds.once("seek", this.progress);
+    },
   },
 
   getters: {
