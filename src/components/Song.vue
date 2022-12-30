@@ -12,7 +12,10 @@
         type="button"
         @click="newSong(song)"
       >
-        <i class="fas fa-play"></i>
+        <i
+          :class="{ 'fa-play': !playing, 'fa-pause': playing }"
+          class="fas"
+        ></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
@@ -114,6 +117,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
+    ...mapState(usePlayerStore, ["playing"]),
     sortedComment() {
       return this.comments.slice().sort((a, b) => {
         if (this.sort === "1") {
