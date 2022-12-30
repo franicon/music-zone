@@ -1,16 +1,20 @@
 import { Howl } from "howler";
 import { defineStore } from "pinia";
-import * as http from "http";
+import helpers from "@/includes/helpers";
 
 export default defineStore("player", {
   state: () => ({
     sounds: {},
-    seek: "00.000",
-    duration: "00.000",
+    seek: "00.00",
+    duration: "00.00",
     current_song: {},
+    playerProgress: "0%",
   }),
   actions: {
     async newSong(song) {
+      if (this.sounds instanceof Howl) {
+        this.sounds.unload();
+      }
       this.current_song = song;
       this.sounds = new Howl({
         src: [song.url],
@@ -37,8 +41,11 @@ export default defineStore("player", {
     },
 
     progress() {
-      this.seek = this.sounds.seek();
-      this.duration = this.sounds.duration();
+      this.seek = helpers.formatTime(this.sounds.seek());
+      this.duration = helpers.formatTime(this.sounds.duration());
+      this.playerProgress = `${
+        (this.sounds.seek() / this.sounds.duration()) * 100
+      }%`;
 
       if (this.sounds.playing()) {
         requestAnimationFrame(this.progress);

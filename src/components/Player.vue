@@ -2,8 +2,9 @@
   <!-- Player -->
   <div class="fixed bottom-0 left-0 bg-white px-4 py-2 w-full">
     <!-- Track Info -->
-    <div class="text-center">
-      <span class="song-title font-bold">Song Title</span> by
+    <div v-if="current_song.modified_name" class="text-center">
+      <span class="song-title font-bold">{{ current_song.modified_name }}</span>
+      by
       <span class="song-artist">Artist</span>
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
@@ -21,15 +22,15 @@
       <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
         <!-- Player Ball -->
         <span
+          :style="{ left: playerProgress }"
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
-          style="left: 50%"
         >
           <i class="fas fa-circle"></i>
         </span>
         <!-- Player Progress Bar-->
         <span
+          :style="{ width: playerProgress }"
           class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
-          style="width: 50%"
         ></span>
       </div>
       <!-- Duration -->
@@ -48,7 +49,13 @@ export default {
     ...mapActions(usePlayerStore, ["toggleAudio"]),
   },
   computed: {
-    ...mapState(usePlayerStore, ["playing", "seek", "duration"]),
+    ...mapState(usePlayerStore, [
+      "playing",
+      "seek",
+      "duration",
+      "current_song",
+      "playerProgress",
+    ]),
   },
 };
 </script>
